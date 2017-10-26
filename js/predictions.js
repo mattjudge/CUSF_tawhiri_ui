@@ -108,10 +108,10 @@ function PredictionCollection(predData) {
         _this.progressBar.makeAnimated();
     };
 
-    this.onRequestUpdate = function(data, error) {
+    this.onRequestUpdate = function(data, status) {
         _this.runningRequests--;
 
-        if(error) {
+        if(status !== 'success') {
             // error, raise notification
             notifications.error('Request failed.');
         } else {
@@ -187,7 +187,7 @@ function PredictionCollection(predData) {
 //  { prediction: <object>, requestParameters: <object>, launchTime: int }
 // giving the returned prediction data.
 function request_prediction(reqParams, launchtime, callback) {
-    var api_url = '/api/v1/',
+    var api_url = 'http://predict.cusf.co.uk/api/v1/',
         statusPollInterval = 1000, //ms
         statusCheckTimeout = 15000, //ms
         predData = null;
@@ -198,10 +198,18 @@ function request_prediction(reqParams, launchtime, callback) {
         type: 'GET',
         dataType: 'json',
         error: function(xhr, status, error) {
-            var py_error = xhr.responseJSON.error;
-            notifications.alert('Prediction error: ' + py_error.type + ' ' + py_error.description);
-            console.log('Prediction error: ' + status + ' ' + error + ' ' + py_error.type + ' ' + py_error.description);
-            callback(null, error);
+            var error_str = 'Prediction error: ';
+            if (xhr.responseJSON != null) {
+                var py_error = xhr.responseJSON.error;
+                if (py_error != null) {
+                    error_str += py_error.type + ' ' + py_error.description + ' ';
+                }
+            } else {
+                error_str += xhr.statusText + ' ' + xhr.status + ' ';
+            }
+            notifications.alert(error_str);
+            console.log(error_str + 'st:' + status + ' er:' + error);
+            callback(null, status);
         },
         success: function(data) {
             predData = data.prediction;
@@ -209,7 +217,7 @@ function request_prediction(reqParams, launchtime, callback) {
                 requestParameters: reqParams,
                 prediction: predData,
                 launchTime: launchtime,
-            }, null);
+            }, 'success');
         }
     });
 }
