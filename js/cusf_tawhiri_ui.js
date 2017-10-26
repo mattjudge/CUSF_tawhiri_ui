@@ -30,4 +30,5 @@ $(function() {
     map = new Map($('#map-wrap'));
     form = new Form($('#form-wrap'));
     notifications = new Notifications($('#notification-area'));
+    map.init();
 });

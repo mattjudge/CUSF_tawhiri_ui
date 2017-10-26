@@ -7,6 +7,8 @@ function Form($wrapper) {
     this.toggle = this.slidingPanel.toggle;
     this.input_launch_hour = $('#inputLaunchHour');
     this.input_launch_minute = $('#inputLaunchMinute');
+    this.$input_launch_lat = $('#inputLaunchLat');
+    this.$input_launch_long = $('#inputLaunchLong');
     this.maxPredictionHours = 180; // latest prediction available
     this.minPredictionHours = 100; // earliest prediction permissible
     this.currentDate = null;
@@ -394,18 +396,28 @@ function Map($wrapper) {
         _this.map = new google.maps.Map(_this.canvas, mapOptions);
         // map is now initialised
 
-        // guess location from users ip and set up maps
-        services.geolocation.getIPPosition(function(position) {
-            if (position !== null) {
-                _this.map.setCenter(position);
-            }
-        });
+        // set marker if cached
+        if (isNumber(form.$input_launch_lat.val()) && isNumber(form.$input_launch_long.val())) {
+            var latlng = new google.maps.LatLng(
+                parseFloat(form.$input_launch_lat.val()),
+                parseFloat(form.$input_launch_long.val())
+            );
+            _this.setLaunch(latlng);
+            _this.map.setCenter(latlng);
+        } else {
+            // guess location from users ip and set up maps
+            services.geolocation.getIPPosition(function(position) {
+                if (position !== null) {
+                    _this.map.setCenter(position);
+                }
+            });
+        }
         // set up html5 geolocation
         $('#gps-locate').click(_this.toggleGpsTracker);
         // start listening for right clicks to set position
         google.maps.event.addListener(_this.map, 'rightclick', function(event) {
             console.log("Right click event", event);
-            _this.setLaunch(event);
+            _this.setLaunch(event.latLng);
             _this.stopListeningForLeftClick();
             form.open();
         });
@@ -527,11 +539,15 @@ function Map($wrapper) {
         console.log('Starting gps tracking');
         _this.isGpsTracking = true;
         $('#gps-locate').removeClass('btn-info').addClass('btn-warning');
-        _this.updateGpsPosition(function(position) {
+        _this.updateGpsPosition(function(latlng) {
             // center
-            _this.map.setCenter(position);
+            _this.map.setCenter(latlng);
             // place marker
-            _this.placeGpsMarker(position);
+            _this.placeGpsMarker(latlng);
+            // populate empty launch lat long
+            if (form.$input_launch_lat.val() === '' && form.$input_launch_long.val() === '') {
+                _this.setLaunch(latlng);
+            }
             // set timeout to run automatically
             function onGpsTimeout() {
                 _this.updateGpsPosition(function(position) {
@@ -571,9 +587,9 @@ function Map($wrapper) {
         // Try HTML5 geolocation
         if (services.geolocation.gpsGeolocation) {
             services.geolocation.getGPSPosition(function(position) {
-                var pos = new google.maps.LatLng(position.coords.latitude,
+                var latlng = new google.maps.LatLng(position.coords.latitude,
                         position.coords.longitude);
-                callback(pos);
+                callback(latlng);
             }, function() {
                 handleNoGeolocation(true);
             });
@@ -609,10 +625,10 @@ function Map($wrapper) {
         }
         _this.map.fitBounds(bounds);
     };
-    this.setLaunch = function(event) {
+    this.setLaunch = function(latLng) {
         console.log('Setting launch position and marker');
-        this.setLaunchPosition(event.latLng);
-        this.placeMarker(event.latLng);
+        this.setLaunchPosition(latLng);
+        this.placeMarker(latLng);
     };
     this.setLaunchPosition = function(latLng) {
         // set the lat long values
@@ -692,8 +708,6 @@ function Map($wrapper) {
             });
         }
     };
-
-    this.init();
     return this;
 }
 function SlidingPanel($element) {
@@ -983,7 +997,7 @@ function ProgressBar($wrapper) {
 var services = {
     geolocation: {
         getIPPosition: function(callback) {
-            $.get('http://freegeoip.net/json/', null, function(data) {
+            $.get('https://freegeoip.net/json/', null, function(data) {
                 if (isNumber(data.latitude) && isNumber(data.longitude)) {
                     callback(new google.maps.LatLng(data.latitude, data.longitude));
                 }
