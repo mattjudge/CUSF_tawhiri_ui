@@ -187,7 +187,10 @@ function PredictionCollection(predData) {
 //  { prediction: <object>, requestParameters: <object>, launchTime: int }
 // giving the returned prediction data.
 function request_prediction(reqParams, launchtime, callback) {
-    var api_url = 'http://predict.cusf.co.uk/api/v1/',
+    // Note: the api_url currently used is a temporary transparent proxy,
+    // until the original api supports https
+    //var api_url = 'http://predict.cusf.co.uk/api/v1/',
+    var api_url = 'https://tawhiriui-1509029406572.appspot.com/predict.cusf.co.uk/api/v1/',
         statusPollInterval = 1000, //ms
         statusCheckTimeout = 15000, //ms
         predData = null;
