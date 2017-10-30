@@ -522,7 +522,7 @@ function Map($wrapper) {
                 icon: MapObjects.GPSArrow,
                 position: latLng,
                 map: _this.map,
-                title: 'Your Current Position (Lat: ' + latLng.lat() + ', Long: ' + latLng.lng() + ')'
+                title: "Your Current Position (" + dispLatLng(latLng) + ")"
             });
         } else {
             // move old
@@ -681,26 +681,22 @@ function Map($wrapper) {
         }
         _this.markers.length = 0;
     };
-
     this.getHourlySliderTooltip = function(launchtime) {
-        //console.log(value);
         try {
-            var date = new Date(launchtime);
-            var path = _this.predictions[0].paths[launchtime].polyCenter.getPath(); // this should probably be abstracted slightly
-            var len = path.getLength();
-            var launch_latlng = path.getAt(0);
-            var landing_latlng = path.getAt(len - 1);
-            //console.log(landing_latlng.lat(), landing_latlng.lng());
-            return '<p>Launch: ' + date.toUTCString() +
-                    '; at ' + launch_latlng.lat() + ', ' + launch_latlng.lng() +
-                    '</p><p>Landing: ' + landing_latlng.lat() + ', ' +
-                    landing_latlng.lng() + '</p>';
+            var launch_dateobj = new Date(launchtime);
+            var path = _this.predictions[0].paths[launchtime];
+            var map_path = path.polyCenter.getPath();
+            var len = map_path.getLength();
+            var launch_latlng = map_path.getAt(0);
+            var landing_latlng = map_path.getAt(len - 1);
+            var land_dateobj = new Date(path.landTime);
+            return "<p>Launch:  " + launch_dateobj.toUTCString() + " at " + dispLatLng(launch_latlng) + "</p>"
+                + "<p>Landing: " + land_dateobj.toUTCString() + " at " + dispLatLng(landing_latlng) + "</p>";
         } catch (e) {
             return ' ';
         }
     };
     this.onHourlySliderSlide = function(launchtime) {
-        //console.log(event);
         if (launchtime !== _this.currentHourlyLaunchtime) {
             _this.currentHourlyLaunchtime = launchtime;
             $.each(_this.predictions, function(index, prediction) {

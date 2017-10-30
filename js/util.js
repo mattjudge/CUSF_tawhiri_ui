@@ -35,4 +35,7 @@ function formatTime(d) {
 function feetToMeters(feet) {
     return 0.3048 * feet; // 1 meter == 0.3048 ft
 }
+function dispLatLng(latlng){
+    return "Lat: " + latlng.lat().toFixed(4) + " Lng: " + latlng.lng().toFixed(4);
+}
 

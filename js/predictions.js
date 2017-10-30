@@ -3,6 +3,7 @@ function Prediction(data) {
 
     this.predData = data.prediction;
     this.launchTime = data.launchTime;
+    this.landTime = null;
     this.pathCollection = [];
     this.polyCenter = null;
     this.polyOverlay = null;
@@ -43,6 +44,7 @@ function Prediction(data) {
         var burst = ascent[ascent.length - 1];
         var descent = stages.descent.trajectory;
         var landing = descent[descent.length - 1];
+        _this.landTime = landing.datetime;
 
         _this.pathCollection.push(new google.maps.Marker({
             position: new google.maps.LatLng(launch.latitude, launch.longitude),
