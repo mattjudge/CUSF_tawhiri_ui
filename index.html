@@ -19,8 +19,8 @@
   </head>
 
   <body>
-    <div id="main-wrap">
-      <div class="tall" id="form-wrap" tabindex="0">
+    <div id="main-wrap" class="tall">
+      <div id="form-wrap" class="tall" tabindex="0">
         <div class="formToggleVisible-wrap">
           <span class="formToggleVisible">
             <span class="toggle-bar toggle-bar-1"></span>
@@ -28,10 +28,8 @@
           </span>
         </div>
         <div id="form">
-          <h3>Tawhiri</h3>
-          <hr/>
           <div class="row">
-            <div class="col-sm-12">
+            <div class="col-xs-12">
               <div class="input-group">
                 <span class="input-group-btn">
                   <button class="btn btn-info" id="gps-locate" type="button"><span class="glyphicon glyphicon-record"></span></button>
@@ -43,37 +41,60 @@
               </div><!-- /input-group -->
             </div>
           </div><!-- /.row -->
+          <div class="row">
+            <div class="col-xs-12">
+              <p></p>
+              <p class="text-right">
+                <small>
+                  Right click map or tap here to
+                  <button id="btn-set-position" class="btn btn-warning btn-xs" type="button">set position</button>
+                </small>
+              </p>
+            </div>
+          </div>
           <form class="form-horizontal" id="prediction-form" role="form">
             <input type="hidden" name="launchsite" value="Other"/>
             <input type="hidden" name="submit" value="Run Prediction"/>
-            <h4>Launch parameters 
-              <small class="text-right">
-                <p class="text-right">Right click map to 
-                  <button id="btn-set-position" class="btn btn-warning btn-xs" type="button" data-toggle="dropdown">set position</button>
-                </p>
-              </small>
-            </h4>
-            <div class="form-group">
 
-            </div>
             <div class="form-group">
-              <label for="inputLaunchLat" class="col-sm-3 control-label">Lat</label>
-              <div class="col-sm-9">
+              <label for="hourly" class="col-xs-2 control-label">Hours:</label>
+              <div class="col-xs-5">
+                <select class="form-control" id="hourly" name="hourly" required="required">
+                  <option value="1" selected="selected">1</option>
+                  <option value="12">12</option>
+                  <option value="24">24</option>
+                  <option value="36">36</option>
+                  <option value="48">48</option>
+                  <option value="72">72</option>
+                  <option value="80">80</option>
+                  <option value="100">100</option>
+                  <option value="180">180</option>
+                </select>
+              </div>
+              <div class="col-xs-5">
+                <button type="submit" class="btn btn-success btn-block">Predict</button>
+              </div>
+            </div>
+
+            <h4>Launch parameters</h4>
+            <div class="form-group">
+              <label for="inputLaunchLat" class="col-xs-3 control-label">Lat</label>
+              <div class="col-xs-9">
                 <input type="number" step="any" class="form-control" id="inputLaunchLat" name="launch_latitude" placeholder="" required="required">
               </div>
             </div>
             <div class="form-group">
-              <label for="inputLaunchLong" class="col-sm-3 control-label">Long</label>
-              <div class="col-sm-9">
+              <label for="inputLaunchLong" class="col-xs-3 control-label">Lon</label>
+              <div class="col-xs-9">
                 <input type="number" step="any" class="form-control" id="inputLaunchLong" name="launch_longitude" placeholder="" required="required">
               </div>
             </div>
             <div class="form-group ">
-              <label for="inputLaunchAltitude" class="col-sm-3 control-label">Altitude</label>
-              <div class="col-sm-9">
+              <label for="inputLaunchAltitude" class="col-xs-3 control-label">Altitude</label>
+              <div class="col-xs-9">
                 <div class="input-group">
                   <input type="number" step="any" class="form-control" id="inputLaunchAltitude" name="launch_altitude" value="0" placeholder="" required="required">
-                  <div class="input-group-btn unit-selection">       
+                  <div class="input-group-btn unit-selection">
                     <input type="hidden" name="unitLaunchAltitude" value="m"/>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="unit-current-LaunchAltitude" class="unit-current">m</span> <span class="caret"></span></button>
                     <ul class="dropdown-menu pull-right">
@@ -85,19 +106,19 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="dateTimePicker" class="col-sm-3 control-label">Date</label>
-              <div class="col-sm-9">
+              <label for="dateTimePicker" class="col-xs-3 control-label">Date</label>
+              <div class="col-xs-9">
                 <div class="form-control" id="displayLaunchDate"></div>
               </div>
-              <div id="dateTimePicker-wrapper" class="col-sm-12 collapse in">
+              <div id="dateTimePicker-wrapper" class="col-xs-12 collapse in">
                 <input id="dateTimePicker"/>
               </div>
             </div>
             <div class="form-group">
-              <label for="inputLaunchHour" class="col-sm-3 control-label">Time</label>
-              <div class="col-sm-9">
+              <label for="inputLaunchHour" class="col-xs-3 control-label">Time</label>
+              <div class="col-xs-9">
                 <div class="row">
-                  <div class="col-sm-6">
+                  <div class="col-xs-6">
                     <select id="inputLaunchHour" name="launch_datetime_hour" class="form-control" required="required">
                       <option value="00">00</option>
                       <option value="01">01</option>
@@ -125,7 +146,7 @@
                       <option value="23">23</option>
                     </select>
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-xs-6">
                     <select id="inputLaunchMinute" name="launch_datetime_min" class="form-control" required="required">
                       <option value="00">00</option>
                       <option value="05">05</option>
@@ -142,19 +163,17 @@
                     </select>
                   </div>
                 </div>
+                <div class="text-right" id="launchDatetimeUTCPreview"></div>
               </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-3 col-sm-9" id="launchDatetimeUTCPreview"></div>
             </div>
 
             <h4>In flight parameters</h4>
             <div class="form-group ">
-              <label for="inputLaunchAscentRate" class="col-sm-6 control-label">Ascent Rate</label>
-              <div class="col-sm-6">
+              <label for="inputLaunchAscentRate" class="col-xs-4 control-label">Ascent</label>
+              <div class="col-xs-8">
                 <div class="input-group">
                   <input type="number" step="1" min="0" class="form-control" id="inputLaunchAscentRate" name="ascent_rate" value="5" placeholder="" required="required">
-                  <div class="input-group-btn unit-selection">         
+                  <div class="input-group-btn unit-selection">
                     <input type="hidden" name="unitLaunchAscentRate" value="m/s"/>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="unit-current">m/s</span> <span class="caret"></span></button>
                     <ul class="dropdown-menu pull-right">
@@ -166,11 +185,11 @@
               </div>
             </div>
             <div class="form-group ">
-              <label for="inputLaunchBurstAlt" class="col-sm-5 control-label">Burst Alt</label>
-              <div class="col-sm-7">
+              <label for="inputLaunchBurstAlt" class="col-xs-4 control-label">Burst Alt</label>
+              <div class="col-xs-8">
                 <div class="input-group">
                   <input type="number" step="100" class="form-control" id="inputLaunchBurstAlt" name="burst_altitude" value="30000" placeholder="" required="required">
-                  <div class="input-group-btn unit-selection">    
+                  <div class="input-group-btn unit-selection">
                     <input type="hidden" name="unitLaunchBurstAlt" value="m"/>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="unit-current">m</span> <span class="caret"></span></button>
                     <ul class="dropdown-menu pull-right">
@@ -182,8 +201,8 @@
               </div>
             </div>
             <div class="form-group ">
-              <label for="inputLaunchDescentRate" class="col-sm-6 control-label">Descent Rate</label>
-              <div class="col-sm-6">
+              <label for="inputLaunchDescentRate" class="col-xs-4 control-label">Descent</label>
+              <div class="col-xs-8">
                 <div class="input-group">
                   <input type="number" step="1" min="0" class="form-control" id="inputLaunchDescentRate" name="descent_rate" value="5" placeholder="" required="required">
                   <div class="input-group-btn unit-selection">  
@@ -198,28 +217,26 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <div class="col-sm-12">
-                <label for="hourly" class="col-sm-3 control-label">Hourly</label>
-                <div class="col-sm-5">
-                  <select class="form-control" id="hourly" name="hourly" required="required">
-                    <option value="1" selected="selected">1</option>
-                    <option value="12">12</option>
-                    <option value="24">24</option>
-                    <option value="36">36</option>
-                    <option value="48">48</option>
-                    <option value="72">72</option>
-                    <option value="80">80</option>
-                    <option value="100">100</option>
-                    <option value="180">180</option>
-                  </select>
-                </div>
-                <div class="col-sm-4">
-                  <button type="submit" class="btn btn-success">Predict</button>
-                </div>
+          </form>
+
+          <footer class="footer">
+            <div class="row">
+              <div class="col-xs-6">
+                <a href="https://github.com/mattjudge/CUSF_tawhiri_ui">About UI</a>
+              </div>
+              <div class="col-xs-6">
+                <a href="https://github.com/cuspaceflight/tawhiri">About Predictor</a>
               </div>
             </div>
-          </form>
+            <div class="row">
+              <div class="col-xs-12  text-center">
+                <small>
+                  <strong class="text-danger">Please note: </strong>No guarantee is given for the accuracy, precision or reliability of the data produced by this software, and you use it entirely at your own risk.
+                </small>
+              </div>
+            </div>
+          </footer>
+
         </div>
       </div>
 

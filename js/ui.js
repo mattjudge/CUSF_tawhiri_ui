@@ -603,7 +603,7 @@ function Map($wrapper) {
         google.maps.event.addListener(_this.map, 'click', function(event) {
             _this.stopListeningForLeftClick();
             console.log("Left click event", event);
-            _this.setLaunch(event);
+            _this.setLaunch(event.latLng);
             form.open();
         });
     };
@@ -690,8 +690,10 @@ function Map($wrapper) {
             var launch_latlng = map_path.getAt(0);
             var landing_latlng = map_path.getAt(len - 1);
             var land_dateobj = new Date(path.landTime);
-            return "<p>Launch:  " + launch_dateobj.toUTCString() + " at " + dispLatLng(launch_latlng) + "</p>"
-                + "<p>Landing: " + land_dateobj.toUTCString() + " at " + dispLatLng(landing_latlng) + "</p>";
+            return "<p>Launch:  " + launch_dateobj.toUTCString() + " at <span class='nowrap'>"
+                + dispLatLng(launch_latlng) + "</span></p>"
+                + "<p>Landing: " + land_dateobj.toUTCString() + " at <span class='nowrap'>"
+                + dispLatLng(landing_latlng) + "</span></p>";
         } catch (e) {
             return ' ';
         }
